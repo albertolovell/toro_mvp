@@ -1,0 +1,1 @@
+a simple stock tracker showing top market movers and a customizable watchlist
