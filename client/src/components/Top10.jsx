@@ -4,10 +4,13 @@ const Top10 = ({ top10, onStockSelect }) => {
   return (
     <div className="top10">
       <h2>Top 10 Stocks</h2>
-      <ul>
+      <ul className="top10-list">
         {Array.from({ length: 10 }, (_, index) => (
-          <li key={index} onClick={() => onStockSelect({ symbol: `STOCK${index + 1}`, name: `Stock ${index + 1}` })}>
+          <li className="top10-card" key={index} onClick={() => onStockSelect({ symbol: `STOCK${index + 1}`, name: `Stock ${index + 1}` })}>
             Stock {index + 1}
+            <button className="add-button" onClick={(e) => {
+              e.stopPropagation();
+            }}>Add to Watchlist</button>
           </li>
         ))}
       </ul>

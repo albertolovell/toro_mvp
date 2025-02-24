@@ -36,23 +36,33 @@ const App = () => {
 
   return (
     <div className="app">
-      <h1>TORO MVP</h1>
-      <div className="search">
-        <input
-          type="text"
-          placeholder="Search for a stock"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          onKeyPress={(e) => e.key === 'Enter' && handleSearch()} />
-          <button onClick={handleSearch}>Search</button>
+      <div className="header">
+        <div className="logo">
+          <h1>TORO MVP</h1>
+        </div>
+        <div className="search-bar">
+          <input
+            type="text"
+            placeholder="Search for a stock"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            onKeyPress={(e) => e.key === 'Enter' && handleSearch()} />
+            <button onClick={handleSearch}>Search</button>
+        </div>
       </div>
-      {selectedStock ? (
-        <StockCard stock={selectedStock} onClose={handleStockClose} />
-      ) : (
-        <Top10 top10={top10} onStockSelect={handleStockSelect} />
-      )}
-      <Watchlist watchlist={watchlist} onStockSelect={handleStockSelect} />
-      <Notifications notifications={notifications} onStockSelect={handleStockSelect}/>
+      <div className="main-content">
+          <div className="dashboard">
+            {selectedStock ? (
+              <StockCard stock={selectedStock} onClose={handleStockClose} />
+            ) : (
+              <Top10 top10={top10} onStockSelect={handleStockSelect} />
+            )}
+          </div>
+        <div className="right-panel">
+          <Watchlist watchlist={watchlist} onStockSelect={handleStockSelect} />
+          <Notifications notifications={notifications} onStockSelect={handleStockSelect}/>
+        </div>
+      </div>
     </div>
   );
 };
