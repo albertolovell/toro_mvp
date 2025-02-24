@@ -2,8 +2,15 @@ require('dotenv').config();
 const express = require('express');
 const axios = require('axios');
 const path = require('path');
+
+const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
+global.fetch = fetch;
+
 const yahooFinance = require('yahoo-finance2').default;
 const { Watchlist, Stock } = require('./db.js');
+
+
+
 
 const app = express();
 
@@ -50,7 +57,7 @@ app.post('/api/watchlist', async (req, res) => {
   res.status(200).send(watchlist.stocks);
 });
 
-app.delete('/api/watchlist:symbol', async (req, res) => {
+app.delete('/api/watchlist/:symbol', async (req, res) => {
   const { symbol } = req.params;
   let watchlist = await Watchlist.findOne();
   if (watchlist) {
