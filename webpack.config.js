@@ -32,6 +32,7 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({
+      template: path.join(SRC_DIR, 'index.html'),
       title: "Toro MVP"
     }),
   ],
