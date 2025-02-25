@@ -9,9 +9,9 @@ const Top = ({ top, watchlist, setWatchlist, onStockSelect, watch }) => {
     <div className="top">
       <h2>Top Stocks</h2>
       <ul className="top-list">
-        {top.map(stock => (
+        {top.map((stock, index) => (
           <ListCard
-            key={stock._id}
+            key={index}
             stock={stock}
             onAction={watch}
             actionLabel="Add to Watchlist"
