@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import Watchlist from './Watchlist.jsx';
 import StockCard from './StockCard.jsx';
 import Notifications from './Notifications.jsx';
-import Top10 from './Top10.jsx';
+import Top from './Top.jsx';
 
 
 const App = () => {
@@ -43,7 +43,7 @@ const App = () => {
         <div className="search-bar">
           <input
             type="text"
-            placeholder="Search for a stock"
+            placeholder="Search for a stock ticker ex: AAPL"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             onKeyPress={(e) => e.key === 'Enter' && handleSearch()} />
@@ -55,7 +55,7 @@ const App = () => {
             {selectedStock ? (
               <StockCard stock={selectedStock} onClose={handleStockClose} />
             ) : (
-              <Top10 top10={top10} onStockSelect={handleStockSelect} />
+              <Top top={top} onStockSelect={handleStockSelect} />
             )}
           </div>
         <div className="right-panel">
