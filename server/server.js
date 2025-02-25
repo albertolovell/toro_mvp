@@ -2,14 +2,14 @@ require('dotenv').config();
 const express = require('express');
 const axios = require('axios');
 const path = require('path');
-const { fetch, Headers, Request, Response} = require('undici');
+const { fetch, Headers, Request, Response } = require('undici');
 global.fetch = fetch;
 global.Headers = Headers;
 global.Request = Request;
 global.Response = Response;
 
 const yahooFinance = require('yahoo-finance2').default;
-const { Watchlist, Stock, Top } = require('./db.js');
+const { Watchlist, Stock, Top, Price } = require('./db.js');
 
 
 const app = express();
