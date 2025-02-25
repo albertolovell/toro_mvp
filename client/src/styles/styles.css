@@ -81,7 +81,7 @@ body {
   gap: 10px;
 }
 
-.top-card {
+.list-card {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -91,11 +91,11 @@ body {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.top-card:hover {
+.list-card:hover {
   background-color: #f1f1f1;
 }
 
-.top-card img {
+.list-card img {
   width: 40px;
   height: 40px;
   border-radius: 50%;
@@ -109,6 +109,15 @@ body {
   color: white;
   cursor: pointer;
   font-family: 'Poppins', sans-serif;
+}
+
+.add-button:hover {
+  background-color: #0056b3;
+}
+
+.remove-button {
+  background-color: #dc3545;
+  color: white;
 }
 
 .right-panel {
