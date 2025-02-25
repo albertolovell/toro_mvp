@@ -13,6 +13,7 @@ const App = () => {
   const [watchlist, setWatchlist] = useState([]);
   const [top, setTop] = useState([]);
   const [notifications, setNotifications] = useState([]);
+  const [priceData, setPriceData] = useState({});
 
   const handleStockSelect = (stock) => setSelectedStock(stock);
   const handleStockClose = () => setSelectedStock(null);
@@ -66,6 +67,19 @@ const App = () => {
       .catch(err => console.error('Failed to update watchlist in db', err));
   };
 
+  const fetchPriceData = async (symbol) => {
+    try {
+      const response = await axios.get(`/api/price/${symbol}`);
+      setPriceData(prev => ({ ...prev, [symbol]: response.data }));
+    } catch (err) {
+      console.error('Failed to fetch historical data', err);
+    }
+  };
+
+  useEffect(() => {
+    top.forEach(stock => fetchPriceData(stock.symbol));
+  }, [top]);
+
   const handleSearch = async () => {
     const sanitized = query.trim().toUpperCase();
     if (!sanitized) return;
@@ -102,23 +116,27 @@ const App = () => {
       <div className="main-content">
           <div className="dashboard">
             {selectedStock ? (
-              <StockCard stock={selectedStock} onClose={handleStockClose} />
+              <StockCard
+                stock={selectedStock}
+                onClose={handleStockClose}
+                priceData={priceData[selectedStock.symbol]} />
             ) : (
               <Top
                 top={top}
                 onStockSelect={setSelectedStock}
-                watch={handleAddToWatchlist} />
+                watch={handleAddToWatchlist}
+                priceData={priceData} />
             )}
           </div>
         <div className="right-panel">
+          <Notifications
+            notifications={notifications}
+            onStockSelect={handleStockSelect} />
           <Watchlist
             watchlist={watchlist}
             setWatchlist={setWatchlist}
             onStockSelect={handleStockSelect}
             onRemove={handleRemove} />
-          <Notifications
-            notifications={notifications}
-            onStockSelect={handleStockSelect} />
         </div>
       </div>
     </div>

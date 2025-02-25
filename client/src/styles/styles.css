@@ -183,6 +183,11 @@ body {
   overflow-y: auto;
 }
 
+.mini-chart {
+  min-width: 100px;
+  flex-shrink: 0;
+}
+
 .close-button {
   background-color: #333;
   color: white;
@@ -190,7 +195,7 @@ body {
   padding: 5px 10px;
   cursor: pointer;
   top: 100px;
-  right: 400px;
+  right: 50%;
   position: absolute;
   border: none;
   font-family: 'Poppins', sans-serif;

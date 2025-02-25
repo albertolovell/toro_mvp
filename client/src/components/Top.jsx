@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import ListCard from './ListCard';
 
-const Top = ({ top, watchlist, setWatchlist, onStockSelect, watch }) => {
+const Top = ({ top, watchlist, setWatchlist, onStockSelect, watch, priceData }) => {
 
 
 
@@ -11,8 +11,9 @@ const Top = ({ top, watchlist, setWatchlist, onStockSelect, watch }) => {
       <ul className="top-list">
         {top.map((stock, index) => (
           <ListCard
-            key={index}
+            key={stock.symbol}
             stock={stock}
+            priceData={priceData[stock.symbol] || []}
             onAction={watch}
             actionLabel="Add to Watchlist"
             onClick={onStockSelect} />
