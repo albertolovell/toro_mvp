@@ -16,8 +16,14 @@ const watchlistSchema = mongoose.Schema ({
   stocks: [stockSchema]
 });
 
+const topSchema = mongoose.Schema ({
+  stocks: [stockSchema],
+  lastUpdated: { type: Date, default: Date.now }
+});
+
 const Watchlist = mongoose.model('Watchlist', watchlistSchema);
 const Stock = mongoose.model('Stock', stockSchema);
+const Top = mongoose.model('Top', topSchema);
 
-module.exports = { Watchlist, Stock };
+module.exports = { Watchlist, Stock, Top };
 
