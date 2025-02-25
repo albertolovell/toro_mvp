@@ -14,6 +14,7 @@ const { Watchlist, Stock, Top } = require('./db.js');
 
 const app = express();
 
+app.use(express.json());
 app.use(express.static(path.join(__dirname, '../client/dist')));
 
 app.get('/api/search', async (req, res) => {
@@ -34,7 +35,8 @@ app.get('/api/search', async (req, res) => {
 app.get('/api/seed/top', async (req, res) => {
   try {
     console.log('Seeding top stocks');
-    const result = await yahooFinance.trendingSymbols('US');
+    const queryOptions = { count: 10 };
+    const result = await yahooFinance.trendingSymbols('US', queryOptions);
 
     if (!result || !result.quotes) {
       throw new Error('No trending stocks found');
@@ -84,39 +86,16 @@ app.get('/api/top', async (req, res) => {
       return res.status(200).send(existingTop.stocks);
     }
 
-    console.log('Fetching top stocks from Yahoo Finance');
-    const result = await yahooFinance.trendingSymbols('US');
-    const topStocks = result.quotes
-      .filter(quote => quote.quoteType === 'EQUITY')
-      .slice(0, 10);
+    console.log('Cached data expired. Fetching top stocks...');
 
-    const stockDetailsPromises = topStocks.map(async (stock) => {
-      try {
-        const details = await yahooFinance.quote(stock.symbol);
-        return {
-          symbol: stock.symbol,
-          name: details.longName || stock.symbol,
-          data: details
-        };
-      } catch (err) {
-        console.error('Failed to fetch stock details:', err.message);
-        return null;
-      }
-    });
+    const seedResponse = await fetch(`http://localhost:${process.env.PORT}/api/seed/top`);
 
-    const stockDetails = await Promise.all(stockDetailsPromises).filter(Boolean);
-    if (stockDetails.length === 0) {
-      return res.status(500).send('No stocks found');
+    if (!seedResponse.ok) {
+      throw new Error('Failed to seed top stocks');
     }
 
-    await Top.findOneAndUpdate(
-      {},
-      { stocks: stockDetails, lastUpdated: new Date() },
-      { upsert: true, new: true }
-    );
-
-    console.log('Top stocks updated in the database');
-    res.status(200).send(stockDetails);
+    const seedData = await seedResponse.json();
+    res.status(200).send(seedData);
   } catch (err) {
     console.error('Error fetching top stocks:', err.message);
     res.status(500).send('Failed to fetch top stocks');
@@ -129,14 +108,22 @@ app.get('/api/watchlist', async (req, res) => {
 });
 
 app.post('/api/watchlist', async (req, res) => {
-  const { symbol } = req.body;
-  let watchlist = await Watchlist.findOne();
-  if (!watchlist) {
-    watchlist = new Watchlist({ stocks: [] });
+  const { stocks } = req.body;
+  try {
+    let watchlist = await Watchlist.findOne();
+
+    if (!watchlist) {
+      watchlist = new Watchlist({ stocks: [] });
+    }
+
+    watchlist.stocks = stocks;
+    await watchlist.save();
+
+    res.status(200).send('watchlist updated');
+  } catch (err) {
+    console.error('Failed to update watchlist:', err.message);
+    return res.status(500).send('Failed to update watchlist');
   }
-  watchlist.stocks = watchlist.stocks.filter(stock => stock.symbol !== symbol);
-  await watchlist.save();
-  res.status(200).send(watchlist.stocks);
 });
 
 app.delete('/api/watchlist/:symbol', async (req, res) => {
