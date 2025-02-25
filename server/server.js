@@ -26,8 +26,35 @@ app.get('/api/search', async (req, res) => {
 
   try {
     const result = await yahooFinance.quote(query);
-    const stockData = Array.isArray(result) ? result : [result];
-    res.status(200).send(stockData);
+
+    if (!result || !result.symbol) {
+      return res.status(404).send('No stock found');
+    }
+
+    const stock = {
+      symbol: result.symbol,
+      name: result.longName || result.symbol,
+      data: result
+    }
+
+    await Stock.findOneAndUpdate(
+      { symbol: stock.symbol },
+      { $set: stock },
+      { upsert: true, new: true }
+    );
+
+    let watchlist = await Watchlist.findOne();
+    if (!watchlist) {
+      watchlist = new Watchlist({ stocks: [] });
+    }
+
+    if (!watchlist.stocks.some(item => item.symbol === stock.symbol)) {
+      watchlist.stocks.push(stock);
+      await watchlist.save();
+      console.log(`added ${stock.symbol} to watchlist`);
+    }
+
+    res.status(200).send(stock);
   } catch (err) {
     console.error(err);
     return res.status(500).send('search fetch failed');
