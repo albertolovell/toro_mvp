@@ -128,6 +128,23 @@ const App = () => {
     }
   };
 
+  const handleNotify = (stock, targetPrice, condition) => {
+    const updatedStock = { ...stock, targetPrice, condition };
+    setWatchlist(prevWatchlist => {
+      const exists = prevWatchlist.some(item => item.symbol === stock.symbol);
+      if (exists) {
+        return prevWatchlist;
+      }
+      const updatedWatchlist = [...prevWatchlist, updatedStock];
+
+      axios.post('/api/watchlist', { stock, targetPrice, condition })
+        .then(() => console.log('db updated'))
+        .catch(err => console.error('Failed to update watchlist in db', err));
+
+      return updatedWatchlist;
+    });
+  };
+
   useEffect(() => {
     const fetchTopStocks = async () => {
       try {
@@ -150,6 +167,22 @@ const App = () => {
     fetchTopStocks();
     fetchWatchlist();
   }, []);
+
+  useEffect(() => {
+    const checkNotifications = () => {
+      const triggered = watchlist.filter(stock => {
+        if (stock.condition === 'above' && stock.data?.regularMarketPrice >= stock.targetPrice) {
+          return true;
+        }
+        if (stock.condition === 'below' && stock.data?.regularMarketPrice <= stock.targetPrice) {
+          return true;
+        }
+        return false;
+      });
+      setNotifications(triggered);
+    };
+    checkNotifications();
+  }, [watchlist]);
 
   useEffect(() => {
     top.forEach(stock => fetchPriceData(stock.symbol));
