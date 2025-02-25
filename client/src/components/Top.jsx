@@ -7,7 +7,7 @@ const Top = ({ top, watchlist, setWatchlist, onStockSelect, watch, priceData }) 
 
   return (
     <div className="top">
-      <h2>Top Stocks</h2>
+      <h2>Top 10 Trending Stocks</h2>
       <ul className="top-list">
         {top.map((stock, index) => (
           <ListCard
