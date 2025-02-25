@@ -102,6 +102,11 @@ app.get('/api/top', async (req, res) => {
   }
 });
 
+app.get('/api/watchlist', async (req, res) => {
+  const watchlist = await Watchlist.findOne() || { stocks: [] };
+  res.status(200).send(watchlist.stocks);
+});
+
 app.post('/api/watchlist', async (req, res) => {
   const { stocks } = req.body;
   try {
@@ -121,19 +126,34 @@ app.post('/api/watchlist', async (req, res) => {
   }
 });
 
-app.delete('/api/price/:symbol', async (req, res) => {
+app.get('/api/price/:symbol', async (req, res) => {
   const { symbol } = req.params;
 
   try {
-    const data = await yahooFinance.historical(symbol, { period1: '2023-01-01', period2: new Date().toISOString().split('T')[0] });
-    const priceData = data.map(item => ({
-      date: item.date.split('T')[0],
+    const period1 = new Date();
+    period1.setMonth(period1.getMonth() - 1);
+    const period2 = new Date();
+
+    const data = await yahooFinance.chart(symbol, {
+      period1: period1.toISOString().split('T')[0],
+      period2: period2.toISOString().split('T')[0],
+      interval: '1d'
+    });
+
+    if (!data || !data.quotes || !data.quotes.length === 0) {
+      console.error(`No historical data found for ${symbol}`);
+      return res.status(404).send(`No historical data found for ${symbol}`);
+    }
+
+    const priceData = data.quotes.map(item => ({
+      date: new Date(item.date).toISOString().split('T')[0],
       price: item.close
-    }));
+    })).filter(item => item.price !== null);
+
     res.status(200).send(priceData);
   } catch (err) {
     console.error('Failed to fetch historical data:', err.message);
-    res.status(500).send('Failed to fetch historical data');
+    res.status(500).send(err.message);
   }
 });
 
