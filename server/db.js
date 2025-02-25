@@ -9,7 +9,9 @@ mongoose.connection.on('error', (err) => console.error('mongoose failed: ', err)
 const stockSchema = mongoose.Schema ({
   symbol: { type: String, unique: true, index: true },
   name: { type: String },
-  data: {type: Object}
+  data: {type: Object},
+  targetPrice: { type: Number, default: null },
+  condition: { type: String, enum: ['above', 'below'], default: null },
 });
 
 const watchlistSchema = mongoose.Schema ({
