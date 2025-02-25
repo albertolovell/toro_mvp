@@ -21,22 +21,6 @@ const App = () => {
   const handleStockSelect = (stock) => setSelectedStock(stock);
   const handleStockClose = () => setSelectedStock(null);
 
-  const handleSearch = async () => {
-    const sanitized = query.trim().toUpperCase();
-    if (!sanitized) return;
-
-    try {
-      const response = await axios.get(`/api/search?query=${sanitized}`);
-      if (response.data.length > 0) {
-        setSelectedStock(response.data[0]);
-      } else {
-        alert('No results found');
-      }
-    } catch (err) {
-      console.error('search failed', err);
-    }
-  };
-
   const handleAddToWatchlist = (stock) => {
     setWatchlist(prevWatchlist => {
       const exists = prevWatchlist.some(item => item.symbol === stock.symbol);
@@ -107,6 +91,26 @@ const App = () => {
       await trainAndPredict(response.data, symbol);
     } catch (err) {
       console.error('Failed to fetch historical data', err);
+    }
+  };
+
+  const handleSearch = async () => {
+    const sanitized = query.trim().toUpperCase();
+    if (!sanitized) return;
+
+    try {
+      const response = await axios.get(`/api/search?query=${sanitized}`);
+      console.log('search results', response.data);
+      if (response.data.length > 0) {
+        const stock = response.data[0];
+
+        setSelectedStock(stock);
+        await fetchPriceData(stock.symbol);
+      } else {
+        alert('No results found');
+      }
+    } catch (err) {
+      console.error('search failed', err);
     }
   };
 
