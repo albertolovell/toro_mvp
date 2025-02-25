@@ -19,13 +19,15 @@ app.use(express.static(path.join(__dirname, '../client/dist')));
 
 app.get('/api/search', async (req, res) => {
   const { query } = req.query;
+
   if (!query) {
     return res.status(400).send('Query parameter is required');
   }
 
   try {
-    const results = await yahooFinance.quote(query);
-    res.status(200).send(results.quotes || []);
+    const result = await yahooFinance.quote(query);
+    const stockData = Array.isArray(result) ? result : [result];
+    res.status(200).send(stockData);
   } catch (err) {
     console.error(err);
     return res.status(500).send('search fetch failed');
