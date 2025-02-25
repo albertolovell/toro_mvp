@@ -13,14 +13,14 @@ const StockCard = ({ stock, onClose, priceData, predictedPrice, confidenceScore 
     <div className="stock-card">
       <h2>{stock.name}  ({stock.symbol})</h2>
       <button className="close-button" onClick={onClose}>X</button>
-      {predictedPrice && (
+      {predictedPrice ? (
         <>
           <span className="current">Current Price: ${stock?.data?.regularMarketPrice?.toFixed(2)}</span>
           <span className="change">% Change: {getPercentageChange(stock?.data?.regularMarketOpen, stock?.data?.regularMarketPrice)}</span>
           <span className="predicted">"Tomorrow's Price": ${parseFloat(predictedPrice).toFixed(2)}</span>
           <span className="confidence">RMSE: +/-${confidenceScore}</span>
         </>
-      )}
+      ) : (<p className="loading-text">Loading stats...</p>)}
       <div className="price-action-chart">
         {Array.isArray(priceData) && priceData.length > 0 ? (
           <ResponsiveContainer

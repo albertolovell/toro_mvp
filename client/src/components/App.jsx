@@ -100,12 +100,26 @@ const App = () => {
 
     try {
       const response = await axios.get(`/api/search?query=${sanitized}`);
-      console.log('search results', response.data);
-      if (response.data.length > 0) {
-        const stock = response.data[0];
 
-        setSelectedStock(stock);
-        await fetchPriceData(stock.symbol);
+      if (response.data) {
+        setSelectedStock(response.data);
+
+        setWatchlist(prevWatchlist => {
+          const exists = prevWatchlist.some(item => item.symbol === response.data.symbol);
+          if (exists) {
+            alert('Stock already in watchlist');
+            return prevWatchlist;
+          }
+          const updatedWatchlist = [...prevWatchlist, response.data];
+
+          axios.post('/api/watchlist', {stocks: updatedWatchlist})
+            .then(() => console.log('db updated'))
+            .catch(err => console.error('Failed to update watchlist in db', err));
+
+          return updatedWatchlist;
+        });
+
+        await fetchPriceData(response.data.symbol);
       } else {
         alert('No results found');
       }
