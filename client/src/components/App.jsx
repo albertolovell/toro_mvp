@@ -11,11 +11,60 @@ const App = () => {
   const [selectedStock, setSelectedStock] = useState(null);
   const [query, setQuery] = useState('');
   const [watchlist, setWatchlist] = useState([]);
-  const [top10, setTop10] = useState([]);
+  const [top, setTop] = useState([]);
   const [notifications, setNotifications] = useState([]);
 
   const handleStockSelect = (stock) => setSelectedStock(stock);
   const handleStockClose = () => setSelectedStock(null);
+
+  useEffect(() => {
+    const fetchTopStocks = async () => {
+      try {
+        const response = await axios.get('/api/top');
+        setTop(response.data);
+      } catch (err) {
+        console.error('Failed to fetch top stocks', err);
+      }
+    };
+
+    const fetchWatchlist = async () => {
+      try {
+        const response = await axios.get('/api/watchlist');
+        setWatchlist(response.data);
+      } catch (err) {
+        console.error('Failed to fetch watchlist', err);
+      }
+    };
+
+    fetchTopStocks();
+    fetchWatchlist();
+  }, []);
+
+  const handleAddToWatchlist = (stock) => {
+    setWatchlist(prevWatchlist => {
+      const exists = prevWatchlist.some(item => item.symbol === stock.symbol);
+      if (exists) {
+        alert('Stock already in watchlist');
+        return prevWatchlist;
+      }
+      const updatedWatchlist = [...prevWatchlist, stock];
+
+      axios.post('/api/watchlist', {stocks: updatedWatchlist})
+        .then(() => console.log('db updated'))
+        .catch(err => console.error('Failed to update watchlist in db', err));
+
+        return updatedWatchlist;
+    });
+  };
+
+  const handleRemove = (stock) => {
+    const updatedWatchlist = watchlist.filter(item => item.symbol !== stock.symbol);
+    setWatchlist(updatedWatchlist);
+
+    axios.post('/api/watchlist', {stocks: updatedWatchlist})
+      .then(() => console.log('db updated'))
+      .catch(err => console.error('Failed to update watchlist in db', err));
+  };
 
   const handleSearch = async () => {
     const sanitized = query.trim().toUpperCase();
@@ -43,7 +92,7 @@ const App = () => {
         <div className="search-bar">
           <input
             type="text"
-            placeholder="Search for a stock ticker ex: AAPL"
+            placeholder="Search for a ticker, ex: AAPL"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             onKeyPress={(e) => e.key === 'Enter' && handleSearch()} />
@@ -55,12 +104,21 @@ const App = () => {
             {selectedStock ? (
               <StockCard stock={selectedStock} onClose={handleStockClose} />
             ) : (
-              <Top top={top} onStockSelect={handleStockSelect} />
+              <Top
+                top={top}
+                onStockSelect={handleStockSelect}
+                watch={handleAddToWatchlist} />
             )}
           </div>
         <div className="right-panel">
-          <Watchlist watchlist={watchlist} onStockSelect={handleStockSelect} />
-          <Notifications notifications={notifications} onStockSelect={handleStockSelect}/>
+          <Watchlist
+            watchlist={watchlist}
+            setWatchlist={setWatchlist}
+            onStockSelect={handleStockSelect}
+            onRemove={handleRemove} />
+          <Notifications
+            notifications={notifications}
+            onStockSelect={handleStockSelect} />
         </div>
       </div>
     </div>

@@ -1,20 +1,19 @@
 import React, { useState } from 'react';
 import ListCard from './ListCard.jsx';
 
-const Watchlist = ({ watchlist, setWatchlist, onStockSelect }) => {
+const Watchlist = ({ watchlist, setWatchlist, onStockSelect, onRemove }) => {
 
   const handleRemove = (stock) => {
-    const updatedWatchlist = watchlist.filter(item => item.symbol !== stock.symbol);
-    setWatchlist(updatedWatchlist);
-  }
+    onRemove(stock);
+  };
 
   return (
     <div className="watchlist">
-      <h2>Watchlist</h2>
+      <h2>Watchlist  ({watchlist.length})</h2>
       <ul>
-        {watchlist.map(stock => (
+        {watchlist.map((stock, index) => (
           <ListCard
-            key={stock._id}
+            key={index}
             stock={stock}
             onAction={handleRemove}
             actionLabel="X"
