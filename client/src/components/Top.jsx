@@ -1,19 +1,21 @@
 import React, { useState } from 'react';
+import ListCard from './ListCard';
 
-const Top = ({ top, onStockSelect }) => {
+const Top = ({ top, watchlist, setWatchlist, onStockSelect, watch }) => {
+
 
 
   return (
     <div className="top">
       <h2>Top Stocks</h2>
       <ul className="top-list">
-        {Array.from({ length: 10 }, (_, index) => (
-          <li className="top-card" key={index} onClick={() => onStockSelect({ symbol: `STOCK${index + 1}`, name: `Stock ${index + 1}` })}>
-            Stock {index + 1}
-            <button className="add-button" onClick={(e) => {
-              e.stopPropagation();
-            }}>Add to Watchlist</button>
-          </li>
+        {top.map(stock => (
+          <ListCard
+            key={stock._id}
+            stock={stock}
+            onAction={watch}
+            actionLabel="Add to Watchlist"
+            onClick={onStockSelect} />
         ))}
       </ul>
     </div>
