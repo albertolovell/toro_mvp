@@ -226,7 +226,8 @@ const App = () => {
                 priceData={priceData[selectedStock.symbol]}
                 predictedPrice={predictedPrice}
                 confidenceScore={confidenceScore}
-                onClose={() => setSelectedStock(null)} />
+                onClose={() => setSelectedStock(null)}
+                onSetNotification={handleNotify} />
             ) : (
               <Top
                 top={top}
