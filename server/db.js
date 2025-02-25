@@ -21,9 +21,16 @@ const topSchema = mongoose.Schema ({
   lastUpdated: { type: Date, default: Date.now }
 });
 
+const priceSchema = mongoose.Schema ({
+  symbol: { type: String, unique: true, index: true },
+  data: [{ date: String, price: Number }],
+  lastUpdated: { type: Date, default: Date.now }
+});
+
 const Watchlist = mongoose.model('Watchlist', watchlistSchema);
 const Stock = mongoose.model('Stock', stockSchema);
 const Top = mongoose.model('Top', topSchema);
+const Price = mongoose.model('Price', priceSchema);
 
-module.exports = { Watchlist, Stock, Top };
+module.exports = { Watchlist, Stock, Top, Price };
 
