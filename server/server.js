@@ -128,8 +128,17 @@ app.post('/api/watchlist', async (req, res) => {
 
 app.get('/api/price/:symbol', async (req, res) => {
   const { symbol } = req.params;
+  const THIRTY_MINUTES = 30 * 60 * 1000;
 
   try {
+    const existingPrice = await Price.findOne({ symbol});
+
+    if (existingPrice && (Date.now() - existingPrice.lastUpdated.getTime()) < THIRTY_MINUTES) {
+      console.log('Using cached price data');
+      return res.status(200).send(existingPrice.data);
+    }
+    console.log(`Fetching new historical data for ${symbol}`);
+
     const period1 = new Date();
     period1.setMonth(period1.getMonth() - 1);
     const period2 = new Date();
@@ -149,6 +158,12 @@ app.get('/api/price/:symbol', async (req, res) => {
       date: new Date(item.date).toISOString().split('T')[0],
       price: item.close
     })).filter(item => item.price !== null);
+
+    await Price.findOneAndUpdate(
+      { symbol },
+      { data: priceData, lastUpdated: new Date() },
+      { upsert: true, new: true }
+    );
 
     res.status(200).send(priceData);
   } catch (err) {
