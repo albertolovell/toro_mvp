@@ -1,6 +1,6 @@
 import React from 'react';
 
-const ListCard = ({ stock, onAction, actionLabel }) => {
+const ListCard = ({ stock, onAction, actionLabel, onClick }) => {
 
   const handleAction = (e) => {
     e.stopPropagation();
@@ -13,7 +13,7 @@ const ListCard = ({ stock, onAction, actionLabel }) => {
   };
 
   return (
-    <div className="list-card">
+    <div className="list-card" onClick={() => onClick(stock)}>
       <h2>{stock.symbol}</h2>
       <p>{stock.name}</p>
       <p>{`$${stock.data.regularMarketPrice.toFixed(2)}`}</p>

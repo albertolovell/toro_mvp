@@ -106,7 +106,7 @@ const App = () => {
             ) : (
               <Top
                 top={top}
-                onStockSelect={handleStockSelect}
+                onStockSelect={setSelectedStock}
                 watch={handleAddToWatchlist} />
             )}
           </div>
