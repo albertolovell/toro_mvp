@@ -1,7 +1,7 @@
 import React from 'react';
 import ListCard from './ListCard.jsx';
 
-const Notifications = ({ notifications, setNotifications, onStockSelect, onRemove }) => {
+const Notifications = ({ notifications, setNotifications, onStockSelect, onRemove, priceData }) => {
 
   const handleStockClick = (stock) => {
     onStockSelect(stock);
@@ -20,6 +20,7 @@ const Notifications = ({ notifications, setNotifications, onStockSelect, onRemov
             <ListCard
               key={index}
               stock={stock}
+              priceData={priceData[stock.symbol] || []}
               onAction={handleRemove}
               actionLabel="X"
               onClick={onStockSelect}

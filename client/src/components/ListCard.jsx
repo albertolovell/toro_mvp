@@ -1,5 +1,5 @@
 import React from 'react';
-import { LineChart, Line, ResponsiveContainer } from 'recharts';
+import { LineChart, Line, ResponsiveContainer, XAxis, YAxis } from 'recharts';
 
 const ListCard = ({ stock, priceData, onAction, actionLabel, onClick, compact }) => {
 
@@ -23,9 +23,11 @@ const ListCard = ({ stock, priceData, onAction, actionLabel, onClick, compact })
         {Array.isArray(priceData) && priceData.length > 0 ? (
           <ResponsiveContainer
             width="100%"
-            height={50}
+            height={70}
             min-width={100}>
             <LineChart data={priceData}>
+              <XAxis dataKey="date" hide={true} />
+              <YAxis hide={true} domain={['auto', 'auto']} />
               <Line
                 type="monotone"
                 dataKey="price"

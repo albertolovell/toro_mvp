@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import ListCard from './ListCard.jsx';
 
-const Watchlist = ({ watchlist, setWatchlist, onStockSelect, onRemove }) => {
+const Watchlist = ({ watchlist, setWatchlist, onStockSelect, onRemove, priceData }) => {
 
   const handleRemove = (stock) => {
     onRemove(stock);
@@ -15,6 +15,7 @@ const Watchlist = ({ watchlist, setWatchlist, onStockSelect, onRemove }) => {
           <ListCard
             key={index}
             stock={stock}
+            priceData={priceData[stock.symbol] || []}
             onAction={handleRemove}
             actionLabel="X"
             onClick={onStockSelect}
