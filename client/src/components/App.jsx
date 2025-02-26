@@ -6,9 +6,11 @@ import StockCard from './StockCard.jsx';
 import Notifications from './Notifications.jsx';
 import Top from './Top.jsx';
 import * as tf from '@tensorflow/tfjs';
+import Login from './Login.jsx';
 
 
 const App = () => {
+  const [user, setUser] = useState(undefined);
   const [selectedStock, setSelectedStock] = useState(null);
   const [query, setQuery] = useState('');
   const [watchlist, setWatchlist] = useState([]);
@@ -17,6 +19,10 @@ const App = () => {
   const [priceData, setPriceData] = useState({});
   const [predictedPrice, setPredictedPrice] = useState(null);
   const [confidenceScore, setConfidenceScore] = useState(null);
+
+  if (user === undefined) {
+    return <div className="loading">Loading...</div>;
+  };
 
   const handleStockSelect = (stock) => setSelectedStock(stock);
   const handleStockClose = () => setSelectedStock(null);
@@ -224,20 +230,27 @@ const App = () => {
 
   return (
     <div className="app">
-      <div className="header">
-        <div className="logo">
-          <h1>TORO MVP</h1>
-        </div>
-        <div className="search-bar">
-          <input
-            type="text"
-            placeholder="Search for a ticker, ex: AAPL"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            onKeyPress={(e) => e.key === 'Enter' && handleSearch()} />
-            <button onClick={handleSearch}>Search</button>
-        </div>
-      </div>
+      {!user ? (
+        <Login setUser={setUser} />
+      ) : (
+        <div>
+          <div className="header">
+            <div className="logo">
+              <h1>TORO MVP</h1>
+            </div>
+            <button
+              className="logout-button"
+              onClick={logOut}>Logout</button>
+            <div className="search-bar">
+              <input
+                type="text"
+                placeholder="Search for a ticker, ex: AAPL"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                onKeyPress={(e) => e.key === 'Enter' && handleSearch()} />
+                <button onClick={handleSearch}>Search</button>
+            </div>
+          </div>
       <div className="main-content">
           <div className="dashboard">
             {selectedStock ? (
@@ -247,7 +260,6 @@ const App = () => {
                 priceData={priceData[selectedStock.symbol]}
                 predictedPrice={predictedPrice}
                 confidenceScore={confidenceScore}
-                onClose={() => setSelectedStock(null)}
                 onSetNotification={handleNotify} />
             ) : (
               <Top
@@ -269,7 +281,9 @@ const App = () => {
             onStockSelect={handleStockSelect}
             onRemove={handleRemove} />
         </div>
+        </div>
       </div>
+      )}
     </div>
   );
 };

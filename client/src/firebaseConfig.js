@@ -1,6 +1,5 @@
-require('dotenv').config();
 import { initializeApp } from "firebase/app";
-import { getAuth, GoogleAuthProvider, createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithPopup, signInAnonymously, signOut, onAuthStateChanged } from "firebase/auth";
+import { getAuth, GoogleAuthProvider, createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithPopup, signInAnonymously, signOut } from "firebase/auth";
 import { getAnalytics } from "firebase/analytics";
 
 // TODO: Add SDKs for Firebase products that you want to use
@@ -74,13 +73,6 @@ const logOut = async () => {
   }
 };
 
-onAuthStateChanged(auth, (user) => {
-  if (user) {
-    console.log('User is signed in:', user);
-  } else {
-    console.log('No user is signed in');
-  }
-});
 
 export { auth, googleProvider, createUser, signInUser, signInWithGoogle, signInAsGuest, logOut };
 
