@@ -1,5 +1,8 @@
+require('dotenv').config();
 import { initializeApp } from "firebase/app";
-import { getAuth, GoogleAuthProvider, createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithPopup, signInAnonymously, signOut } from "firebase/auth";
+import { getAuth, GoogleAuthProvider, createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithPopup, signInAnonymously, signOut, onAuthStateChanged } from "firebase/auth";
+import { getAnalytics } from "firebase/analytics";
+
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -44,8 +47,9 @@ const signInUser = async (email, password) => {
 const signInWithGoogle = async () => {
   try {
     await signInWithPopup(auth, googleProvider);
+    const user = result.user;
     // Signed in
-    console.log('User signed in with Google:');
+    console.log('User signed in with Google:', user);
   } catch (error) {
     console.error('Google login failed:', error.message);
   }
@@ -70,7 +74,15 @@ const logOut = async () => {
   }
 };
 
-export { createUser, signInUser, signInWithGoogle, signInAsGuest, logOut };
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    console.log('User is signed in:', user);
+  } else {
+    console.log('No user is signed in');
+  }
+});
+
+export { auth, googleProvider, createUser, signInUser, signInWithGoogle, signInAsGuest, logOut };
 
 
 
