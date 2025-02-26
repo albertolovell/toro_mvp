@@ -39,7 +39,7 @@ const ListCard = ({ stock, priceData, onAction, actionLabel, onClick }) => {
       <p>{`$${stock.data.regularMarketPrice.toFixed(2)}`}</p>
       <p>{getPercentageChange(stock.data.regularMarketOpen, stock.data.regularMarketPrice)}</p>
       <button
-        className={`action-button ${actionLabel === 'X' ? 'remove-button' : 'add-button'}`}
+        className={`action-button ${actionLabel === 'X' ? 'close-button' : 'add-button'}`}
         onClick={handleAction}>{actionLabel}</button>
     </div>
   );

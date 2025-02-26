@@ -1,15 +1,20 @@
 import React from 'react';
+import ListCard from './ListCard.jsx';
 
-const Notifications = ({ notifications, setNotifications, onStockSelect }) => {
+const Notifications = ({ notifications, setNotifications, onStockSelect, onRemove }) => {
 
   const handleStockClick = (stock) => {
     onStockSelect(stock);
   };
 
-  const handleDelete = (stock) => {
-    const updatedNotifications = notifications.filter(item => item.symbol !== stock.symbol);
-    setNotifications(updatedNotifications);
-  }
+  const handleRemove = (stock) => {
+    onRemove(stock);
+  };
+
+  // const handleDelete = (stock) => {
+  //   const updatedNotifications = notifications.filter(item => item.symbol !== stock.symbol);
+  //   setNotifications(updatedNotifications);
+  // }
 
   return (
     <div className="notifications">
@@ -19,7 +24,7 @@ const Notifications = ({ notifications, setNotifications, onStockSelect }) => {
             <ListCard
               key={index}
               stock={stock}
-              onAction={handleDelete}
+              onAction={handleRemove}
               actionLabel="X"
               onClick={onStockSelect} />
           ))}

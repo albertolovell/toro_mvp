@@ -247,7 +247,8 @@ const App = () => {
           <Notifications
             notifications={notifications}
             onStockSelect={handleStockSelect}
-            setNotifications={setNotifications} />
+            setNotifications={setNotifications}
+            onRemove={handleRemove} />
           <Watchlist
             watchlist={watchlist}
             setWatchlist={setWatchlist}

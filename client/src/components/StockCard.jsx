@@ -12,7 +12,7 @@ const StockCard = ({ stock, onClose, priceData, predictedPrice, confidenceScore,
     return (((current - open) / open) * 100).toFixed(2) + '%';
   };
 
-  handleSetNotification = () => {
+  const handleSetNotification = () => {
     onSetNotification(stock, targetPrice, condition);
     setShowModal(false);
   };
