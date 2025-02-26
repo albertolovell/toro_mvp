@@ -2,6 +2,7 @@ var path = require("path");
 var SRC_DIR = path.join(__dirname, "/client/src");
 var DIST_DIR = path.join(__dirname, "/client/dist");
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const Dotenv = require('dotenv-webpack');
 
 
 module.exports = {
@@ -35,6 +36,11 @@ module.exports = {
       template: path.join(SRC_DIR, 'index.html'),
       title: "Toro MVP"
     }),
+    new Dotenv({
+      path: path.resolve(__dirname, '.env'),
+      safe: true,
+      systemvars: true
+    })
   ],
   resolve: {
     extensions: [".js", ".jsx"],

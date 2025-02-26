@@ -7,6 +7,8 @@ import Notifications from './Notifications.jsx';
 import Top from './Top.jsx';
 import * as tf from '@tensorflow/tfjs';
 import Login from './Login.jsx';
+import { onAuthStateChanged } from 'firebase/auth';
+import { auth, logOut } from '../firebaseConfig.js';
 
 
 const App = () => {
@@ -20,9 +22,36 @@ const App = () => {
   const [predictedPrice, setPredictedPrice] = useState(null);
   const [confidenceScore, setConfidenceScore] = useState(null);
 
+  useEffect(() => {
+    console.log('Login component mounted');
+    const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
+      if (firebaseUser) {
+        console.log('User state changed:', firebaseUser);
+        const { displayName, email, uid, isAnonymous } = firebaseUser;
+        setUser({
+          name: displayName || 'Guest',
+          email: email || 'guest@toro.com',
+          uid,
+          isAnonymous
+        });
+      } else {
+        console.log('No user detected');
+        setUser(null);
+      }
+    });
+    return () => unsubscribe();
+  }, []);
+
   if (user === undefined) {
+    console.log('User is undefined, loading...');
     return <div className="loading">Loading...</div>;
   };
+
+  if (!user) {
+    console.log('User is null, showing login');
+    return <Login setUser={setUser} />;
+  };
+  console.log('User is logged in:', user);
 
   const handleStockSelect = (stock) => setSelectedStock(stock);
   const handleStockClose = () => setSelectedStock(null);

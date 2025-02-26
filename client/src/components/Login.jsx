@@ -5,8 +5,10 @@ import { onAuthStateChanged } from 'firebase/auth';
 const Login = ({ setUser }) => {
 
   React.useEffect(() => {
+    console.log('Login component mounted');
     onAuthStateChanged(auth, (user) => {
       if (user) {
+        console.log('User state changed:', user);
         const { displayName, email, uid, isAnonymous } = user;
         setUser({
           name: displayName || 'Guest',
@@ -15,10 +17,12 @@ const Login = ({ setUser }) => {
           isAnonymous
         });
       } else {
+        console.log('No user detected');
         setUser(null);
       }
     });
   }, [setUser]);
+
 
 
   return (
