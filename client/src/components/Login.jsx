@@ -1,5 +1,5 @@
 import React from 'react';
-import { signInWithGoogle, signInAsGuest, logOut } from '../firebaseConfig.js';
+import { signInWithGoogle, signInAsGuest } from '../firebaseConfig.js';
 
 const Login = () => {
 

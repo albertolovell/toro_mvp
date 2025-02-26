@@ -54,7 +54,7 @@ const StockCard = ({ stock, onClose, priceData, predictedPrice, confidenceScore,
               <span className="target">Target Price: {stock.condition} ${stock.targetPrice}</span>
             )}
           </div>
-        ) : (<p className="loading-tf">
+        ) : (<p className="loading-text">
                 TensorFlow.js: Generating Price Forecast
                 <span className="loading-dots">
                   <span className="dot"></span>
@@ -78,17 +78,28 @@ const StockCard = ({ stock, onClose, priceData, predictedPrice, confidenceScore,
               margin={{ top: 20, right: 30, left: 0, bottom: 0}}>
               <XAxis dataKey="date" />
               <YAxis domain={['auto', 'auto']}/>
-              <Tooltip />
+              <Tooltip
+                contentStyle={{ backgroundColor: '#333', color: '#fff', borderRadius: '10px' }}
+                itemStyle={{ color: '#82ca9d' }}
+                labelStyle={{ color: '#8884d8' }}
+                formatter={(value) => [`$${value.toFixed(2)}`, 'Price']}/>
               <CartesianGrid strokeDasharray="3 3" />
+                <defs>
+                  <linearGradient id="colorPrice" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#82ca9d" stopOpacity={0.8} />
+                    <stop offset="100%" stopColor="#8884d8" stopOpacity={0.2} />
+                  </linearGradient>
+                </defs>
               <Line
                 type="monotone"
                 dataKey="price"
                 stroke="#8884d8"
+                strokeWidth={2}
                 dot={false} />
             </LineChart>
           </ResponsiveContainer>
         ) : (
-          <p className="loading-text">
+          <p className="loading-chart">
             Loading price action chart
             <span className="loading-dots">
               <span className="dot"></span>
