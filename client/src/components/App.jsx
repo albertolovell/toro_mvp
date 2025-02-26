@@ -69,7 +69,7 @@ const App = () => {
       .catch(err => console.error('Failed to update watchlist in db', err));
   };
 
-  const trainAndPredict = async (data, symbol) => {
+  const trainAndPredict = async (data) => {
     if (!Array.isArray(data) || data.length < 2) return;
 
     const dates = data.map((_, index) => index);
@@ -107,10 +107,15 @@ const App = () => {
   };
 
   const fetchPriceData = async (symbol) => {
+    if (!symbol || priceData[symbol]) return;
+
     try {
       const response = await axios.get(`/api/price/${symbol}`);
       setPriceData(prev => ({ ...prev, [symbol]: response.data }));
-      await trainAndPredict(response.data, symbol);
+
+      if (selectedStock?.symbol === symbol) {
+        await trainAndPredict(response.data);
+      }
     } catch (err) {
       console.error('Failed to fetch historical data', err);
     }
@@ -188,26 +193,16 @@ const App = () => {
   };
 
   useEffect(() => {
-    const fetchTopStocks = async () => {
-      try {
-        const response = await axios.get('/api/top');
-        setTop(response.data);
-      } catch (err) {
-        console.error('Failed to fetch top stocks', err);
-      }
+    const fetchTopAndWatchlist = async () => {
+      const [topResponse, watchlistResponse] = await Promise.all([
+        axios.get('/api/top'),
+        axios.get('/api/watchlist')
+      ]);
+      setTop(topResponse.data);
+      setWatchlist(watchlistResponse.data);
     };
 
-    const fetchWatchlist = async () => {
-      try {
-        const response = await axios.get('/api/watchlist');
-        setWatchlist(response.data);
-      } catch (err) {
-        console.error('Failed to fetch watchlist', err);
-      }
-    };
-
-    fetchTopStocks();
-    fetchWatchlist();
+    fetchTopAndWatchlist();
   }, []);
 
   useEffect(() => {
@@ -227,9 +222,17 @@ const App = () => {
   }, [watchlist]);
 
   useEffect(() => {
-    top.forEach(stock => fetchPriceData(stock.symbol));
-    notifications.forEach(stock => fetchPriceData(stock.symbol));
-    watchlist.forEach(stock => fetchPriceData(stock.symbol));
+    const symbolsToFetch = new Set([
+      ...top.map(stock => stock.symbol),
+      ...notifications.map(stock => stock.symbol),
+      ...watchlist.map(stock => stock.symbol)
+    ]);
+
+    symbolsToFetch.forEach(symbol => {
+      if (!priceData[symbol]) {
+        fetchPriceData(symbol);
+      }
+    });
   }, [top, notifications, watchlist]);
 
   useEffect(() => {
