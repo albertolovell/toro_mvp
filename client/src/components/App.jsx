@@ -103,15 +103,25 @@ const App = () => {
       const response = await axios.get(`/api/search?query=${sanitized}`);
 
       if (response.data) {
-        setSelectedStock(response.data);
+        const stockData = response.data;
+
+        const formatted = {
+          symbol: stockData.symbol,
+          name: stockData.name,
+          data: stockData.data,
+          targetPrice: null,
+          condition: null,
+        }
+
+        setSelectedStock(formatted);
 
         setWatchlist(prevWatchlist => {
-          const exists = prevWatchlist.some(item => item.symbol === response.data.symbol);
+          const exists = prevWatchlist.some(item => item.symbol === formatted.symbol);
           if (exists) {
             alert('Stock already in watchlist');
             return prevWatchlist;
           }
-          const updatedWatchlist = [...prevWatchlist, response.data];
+          const updatedWatchlist = [...prevWatchlist, formatted];
 
           axios.post('/api/watchlist', {stocks: updatedWatchlist})
             .then(() => console.log('db updated'))
@@ -120,7 +130,7 @@ const App = () => {
           return updatedWatchlist;
         });
 
-        await fetchPriceData(response.data.symbol);
+        await fetchPriceData(formatted.symbol);
       } else {
         alert('No results found');
       }
@@ -130,16 +140,20 @@ const App = () => {
   };
 
   const handleNotify = (stock, targetPrice, condition) => {
-    const updatedStock = { ...stock, targetPrice, condition };
+    const updatedStock = {
+      ...stock,
+      targetPrice: parseFloat(targetPrice),
+      condition
+    };
 
     setWatchlist(prevWatchlist => {
       const exists = prevWatchlist.some(item => item.symbol === stock.symbol);
       let updatedWatchlist;
 
       if (exists) {
-        updatedWatchlist = prevWatchlist.map(item => {
-          item.symbol === stock.symbol ? { ...item, targetPrice, condition } : item;
-        });
+        updatedWatchlist = prevWatchlist.map(item =>
+          item.symbol === stock.symbol ? { ...item, targetPrice, condition } : item
+        );
       } else {
         updatedWatchlist = [...prevWatchlist, updatedStock];
       }

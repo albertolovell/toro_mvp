@@ -32,6 +32,10 @@ const StockCard = ({ stock, onClose, priceData, predictedPrice, confidenceScore,
           <span className="change">% Change: {getPercentageChange(stock?.data?.regularMarketOpen, stock?.data?.regularMarketPrice)}</span>
           <span className="predicted">"Tomorrow's Price": ${parseFloat(predictedPrice).toFixed(2)}</span>
           <span className="confidence">RMSE: +/-${confidenceScore}</span>
+
+          {stock.targetPrice && (
+            <span className="target">Target Price: {stock.condition} ${stock.targetPrice}</span>
+          )}
         </>
       ) : (<p className="loading-text">Loading stats...</p>)}
 

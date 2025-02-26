@@ -147,7 +147,9 @@ app.post('/api/watchlist', async (req, res) => {
     }
 
     watchlist.stocks = stocks.map(stock => ({
-      ...stock,
+      symbol: stock.symbol,
+      name: stock.name,
+      data: stock.data,
       targetPrice: stock.targetPrice || null,
       condition: stock.condition || null
     }));

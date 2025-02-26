@@ -11,10 +11,6 @@ const Notifications = ({ notifications, setNotifications, onStockSelect, onRemov
     onRemove(stock);
   };
 
-  // const handleDelete = (stock) => {
-  //   const updatedNotifications = notifications.filter(item => item.symbol !== stock.symbol);
-  //   setNotifications(updatedNotifications);
-  // }
 
   return (
     <div className="notifications">
