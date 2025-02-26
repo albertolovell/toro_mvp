@@ -228,7 +228,9 @@ const App = () => {
 
   useEffect(() => {
     top.forEach(stock => fetchPriceData(stock.symbol));
-  }, [top]);
+    notifications.forEach(stock => fetchPriceData(stock.symbol));
+    watchlist.forEach(stock => fetchPriceData(stock.symbol));
+  }, [top, notifications, watchlist]);
 
   useEffect(() => {
     if (selectedStock) {
@@ -246,7 +248,14 @@ const App = () => {
   return (
     <div className="app">
       {user === undefined ? (
-        <div className="loading-text">Loading...</div>
+        <div className="loading-login">
+          Loading
+          <span className="loading-dots">
+            <span className="dot"> </span>
+            <span className="dot"> </span>
+            <span className="dot"> </span>
+          </span>
+        </div>
       ) : !user ? (
         <Login />
       ) : (
@@ -255,9 +264,6 @@ const App = () => {
             <div className="logo">
               <h1>TORO MVP</h1>
             </div>
-              <button
-                className="logout-button"
-                onClick={logOut}>Logout</button>
             <div className="search-bar">
               <input
                 type="text"
@@ -266,6 +272,9 @@ const App = () => {
                 onChange={(e) => setQuery(e.target.value)}
                 onKeyPress={(e) => e.key === 'Enter' && handleSearch()} />
                 <button onClick={handleSearch}>Search</button>
+                <button
+                className="logout-button"
+                onClick={logOut}>Logout</button>
             </div>
           </div>
       <div className="main-content">
@@ -291,12 +300,14 @@ const App = () => {
             notifications={notifications}
             onStockSelect={handleStockSelect}
             setNotifications={setNotifications}
-            onRemove={handleRemove} />
+            onRemove={handleRemove}
+            priceData={priceData} />
           <Watchlist
             watchlist={watchlist}
             setWatchlist={setWatchlist}
             onStockSelect={handleStockSelect}
-            onRemove={handleRemove} />
+            onRemove={handleRemove}
+            priceData={priceData} />
         </div>
         </div>
       </div>

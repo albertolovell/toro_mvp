@@ -21,23 +21,52 @@ const StockCard = ({ stock, onClose, priceData, predictedPrice, confidenceScore,
   return (
     <div className="stock-card">
       <h2>{stock.name}  ({stock.symbol})</h2>
-      <div className="stock-card-buttons">
-        <button className="notify-button" onClick={() => setShowModal(true)}>+</button>
-        <button className="close-button" onClick={onClose}>X</button>
+      <div className="stock-card-header">
+        {predictedPrice ? (
+          <div className="stock-stats">
+            <span
+              className="current"
+              title="The current market price of the stock, delayed by 30minutes"
+              >Current Price: ${stock?.data?.regularMarketPrice?.toFixed(2)}</span>
+            <span
+              className="change"
+              title="Percentage change from the market open price to the current price"
+              >% Change:
+                <span
+                  className={`change-value ${getPercentageChange(stock?.data?.regularMarketOpen, stock?.data?.regularMarketPrice) >= 0 ? 'positive' : 'negative'}`}>
+                {getPercentageChange(stock?.data?.regularMarketOpen, stock?.data?.regularMarketPrice)}
+                </span>
+              </span>
+            <span
+              className="predicted"
+              title="Predicted price for tomorrow using TensorFlow.js, trained on the past month of historical data"
+              >"Forecasted Price":
+                <span className="predicted-value">
+                  ${parseFloat(predictedPrice).toFixed(2)}
+                </span>
+            </span>
+            <span
+              className="confidence"
+              title="Confidence level based on Root Mean Square Error (RMSE), representing the average deviation between predicted and actual prices in this model"
+              >(RMSE): +/- ${confidenceScore}</span>
+
+            {stock.targetPrice && (
+              <span className="target">Target Price: {stock.condition} ${stock.targetPrice}</span>
+            )}
+          </div>
+        ) : (<p className="loading-tf">
+                TensorFlow.js: Generating Price Forecast
+                <span className="loading-dots">
+                  <span className="dot"></span>
+                  <span className="dot"></span>
+                  <span className="dot"></span>
+                </span>
+            </p>)}
+        <div className="stock-card-buttons">
+          <button className="notify-button" onClick={() => setShowModal(true)}>+</button>
+          <button className="close-button" onClick={onClose}>X</button>
+        </div>
       </div>
-
-      {predictedPrice ? (
-        <>
-          <span className="current">Current Price: ${stock?.data?.regularMarketPrice?.toFixed(2)}</span>
-          <span className="change">% Change: {getPercentageChange(stock?.data?.regularMarketOpen, stock?.data?.regularMarketPrice)}</span>
-          <span className="predicted">"Tomorrow's Price": ${parseFloat(predictedPrice).toFixed(2)}</span>
-          <span className="confidence">RMSE: +/-${confidenceScore}</span>
-
-          {stock.targetPrice && (
-            <span className="target">Target Price: {stock.condition} ${stock.targetPrice}</span>
-          )}
-        </>
-      ) : (<p className="loading-text">Loading stats...</p>)}
 
       <div className="price-action-chart">
         {Array.isArray(priceData) && priceData.length > 0 ? (
@@ -59,7 +88,14 @@ const StockCard = ({ stock, onClose, priceData, predictedPrice, confidenceScore,
             </LineChart>
           </ResponsiveContainer>
         ) : (
-          <p className="loading-text">Loading price action data...</p>
+          <p className="loading-text">
+            Loading price action chart
+            <span className="loading-dots">
+              <span className="dot"></span>
+              <span className="dot"></span>
+              <span className="dot"></span>
+            </span>
+          </p>
         )}
       </div>
       {showModal && (
