@@ -137,7 +137,7 @@ app.get('/api/watchlist', async (req, res) => {
 });
 
 app.post('/api/watchlist', async (req, res) => {
-  const { stocks, targetPrice = null, condition = null } = req.body;
+  const { stocks } = req.body;
 
   try {
     let watchlist = await Watchlist.findOne();
@@ -146,19 +146,11 @@ app.post('/api/watchlist', async (req, res) => {
       watchlist = new Watchlist({ stocks: [] });
     }
 
-    const existingIndex = watchlist.stocks.findIndex(item => item.symbol === stock.symbol);
-
-    const updatedStock = {
+    watchlist.stocks = stocks.map(stock => ({
       ...stock,
-      targetPrice: targetPrice || null,
-      condition: condition || null
-    };
-
-    if (existingIndex !== -1) {
-      watchlist.stocks[existingIndex] = updatedStock;
-    } else {
-      watchlist.stocks.push(updatedStock);
-    }
+      targetPrice: stock.targetPrice || null,
+      condition: stock.condition || null
+    }));
 
     await watchlist.save();
 
