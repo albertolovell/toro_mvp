@@ -22,7 +22,8 @@ const Notifications = ({ notifications, setNotifications, onStockSelect, onRemov
               stock={stock}
               onAction={handleRemove}
               actionLabel="X"
-              onClick={onStockSelect} />
+              onClick={onStockSelect}
+              compact={true} />
           ))}
       </ul>
     </div>

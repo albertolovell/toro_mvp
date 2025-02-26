@@ -23,10 +23,8 @@ const App = () => {
   const [confidenceScore, setConfidenceScore] = useState(null);
 
   useEffect(() => {
-    console.log('Login component mounted');
     const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
       if (firebaseUser) {
-        console.log('User state changed:', firebaseUser);
         const { displayName, email, uid, isAnonymous } = firebaseUser;
         setUser({
           name: displayName || 'Guest',
@@ -35,23 +33,11 @@ const App = () => {
           isAnonymous
         });
       } else {
-        console.log('No user detected');
         setUser(null);
       }
     });
     return () => unsubscribe();
   }, []);
-
-  if (user === undefined) {
-    console.log('User is undefined, loading...');
-    return <div className="loading">Loading...</div>;
-  };
-
-  if (!user) {
-    console.log('User is null, showing login');
-    return <Login setUser={setUser} />;
-  };
-  console.log('User is logged in:', user);
 
   const handleStockSelect = (stock) => setSelectedStock(stock);
   const handleStockClose = () => setSelectedStock(null);
@@ -259,17 +245,19 @@ const App = () => {
 
   return (
     <div className="app">
-      {!user ? (
-        <Login setUser={setUser} />
+      {user === undefined ? (
+        <div className="loading-text">Loading...</div>
+      ) : !user ? (
+        <Login />
       ) : (
         <div>
           <div className="header">
             <div className="logo">
               <h1>TORO MVP</h1>
             </div>
-            <button
-              className="logout-button"
-              onClick={logOut}>Logout</button>
+              <button
+                className="logout-button"
+                onClick={logOut}>Logout</button>
             <div className="search-bar">
               <input
                 type="text"

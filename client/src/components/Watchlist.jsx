@@ -17,7 +17,8 @@ const Watchlist = ({ watchlist, setWatchlist, onStockSelect, onRemove }) => {
             stock={stock}
             onAction={handleRemove}
             actionLabel="X"
-            onClick={onStockSelect} />
+            onClick={onStockSelect}
+            compact={true} />
         ))}
       </ul>
     </div>

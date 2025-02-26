@@ -1,7 +1,7 @@
 import React from 'react';
 import { LineChart, Line, ResponsiveContainer } from 'recharts';
 
-const ListCard = ({ stock, priceData, onAction, actionLabel, onClick }) => {
+const ListCard = ({ stock, priceData, onAction, actionLabel, onClick, compact }) => {
 
   const handleAction = (e) => {
     e.stopPropagation();
@@ -14,9 +14,11 @@ const ListCard = ({ stock, priceData, onAction, actionLabel, onClick }) => {
   };
 
   return (
-    <div className="list-card" onClick={() => onClick(stock)}>
-      <h2>{stock.symbol}</h2>
-      <p>{stock.name}</p>
+    <div className={`list-card ${compact ? 'compact' : ''}`} onClick={() => onClick(stock)}>
+      <div className="stock-info">
+        <h2 className="stock-symbol">{stock.symbol}</h2>
+        <p className="stock-name">{stock.name}</p>
+      </div>
       <div className="mini-chart">
         {Array.isArray(priceData) && priceData.length > 0 ? (
           <ResponsiveContainer
@@ -36,8 +38,13 @@ const ListCard = ({ stock, priceData, onAction, actionLabel, onClick }) => {
           <span className="loading-text">...</span>
         )}
       </div>
-      <p>{`$${stock.data.regularMarketPrice.toFixed(2)}`}</p>
-      <p>{getPercentageChange(stock.data.regularMarketOpen, stock.data.regularMarketPrice)}</p>
+      <p className="price">{`$${stock.data.regularMarketPrice.toFixed(2)}`}</p>
+      <p
+        className={`percent-change ${
+          getPercentageChange(stock.data.regularMarketOpen, stock.data.regularMarketPrice).startsWith('-')
+          ? 'negative'
+          : 'positive'
+      }`}>{getPercentageChange(stock.data.regularMarketOpen, stock.data.regularMarketPrice)}</p>
       <button
         className={`action-button ${actionLabel === 'X' ? 'close-button' : 'add-button'}`}
         onClick={handleAction}>{actionLabel}</button>
