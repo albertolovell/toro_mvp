@@ -137,7 +137,7 @@ app.get('/api/watchlist', async (req, res) => {
 });
 
 app.post('/api/watchlist', async (req, res) => {
-  const { stocks, stock, targetPrice, condition } = req.body;
+  const { stocks } = req.body;
 
   try {
     let watchlist = await Watchlist.findOne();
@@ -146,30 +146,15 @@ app.post('/api/watchlist', async (req, res) => {
       watchlist = new Watchlist({ stocks: [] });
     }
 
-    if (Array.isArray(stocks)) {
-      watchlist.stocks = stocks;
-    } else if (stock && targetPrice !== undefined && condition) {
-      const existingStockIndex = watchlist.stocks.findIndex(item => item.symbol === stock.symbol);
+    watchlist.stocks = stocks.map(stock => ({
+      ...stock,
+      targetPrice: stock.targetPrice || null,
+      condition: stock.condition || null
+    }));
 
-      if (existingStockIndex !== -1) {
-        watchlist.stocks[existingStockIndex] = {
-          ...stock,
-          targetPrice,
-          condition
-        };
-      } else {
-        watchlist.stocks.push({
-          ...stock,
-          targetPrice,
-          condition
-        });
-      }
-    } else {
-        return res.status(400).send('Invalid request body');
-      }
+    await watchlist.save();
 
-      await watchlist.save();
-      res.status(200).send('Watchlist updated');
+    res.status(200).send('Watchlist updated');
   } catch (err) {
     console.error('Failed to update watchlist:', err.message);
     return res.status(500).send('Failed to update watchlist');

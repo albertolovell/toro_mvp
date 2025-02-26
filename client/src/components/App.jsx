@@ -39,7 +39,8 @@ const App = () => {
   };
 
   const handleRemove = (stock) => {
-    const updatedWatchlist = watchlist.filter(item => item.symbol !== stock.symbol);
+    const updatedWatchlist = watchlist.map(item => item.symbol === stock.symbol ? { ...item, targetPrice: null, condition: null } : item).filter(item => item.symbol !== stock.symbol);
+
     setWatchlist(updatedWatchlist);
 
     axios.post('/api/watchlist', {stocks: updatedWatchlist})
@@ -130,14 +131,20 @@ const App = () => {
 
   const handleNotify = (stock, targetPrice, condition) => {
     const updatedStock = { ...stock, targetPrice, condition };
+
     setWatchlist(prevWatchlist => {
       const exists = prevWatchlist.some(item => item.symbol === stock.symbol);
-      if (exists) {
-        return prevWatchlist;
-      }
-      const updatedWatchlist = [...prevWatchlist, updatedStock];
+      let updatedWatchlist;
 
-      axios.post('/api/watchlist', { stock, targetPrice, condition })
+      if (exists) {
+        updatedWatchlist = prevWatchlist.map(item => {
+          item.symbol === stock.symbol ? { ...item, targetPrice, condition } : item;
+        });
+      } else {
+        updatedWatchlist = [...prevWatchlist, updatedStock];
+      }
+
+      axios.post('/api/watchlist', { stocks: updatedWatchlist })
         .then(() => console.log('db updated'))
         .catch(err => console.error('Failed to update watchlist in db', err));
 
@@ -239,7 +246,8 @@ const App = () => {
         <div className="right-panel">
           <Notifications
             notifications={notifications}
-            onStockSelect={handleStockSelect} />
+            onStockSelect={handleStockSelect}
+            setNotifications={setNotifications} />
           <Watchlist
             watchlist={watchlist}
             setWatchlist={setWatchlist}
