@@ -52,12 +52,23 @@ body {
   flex-wrap: wrap;
 }
 
+.logo {
+  align-items: center;
+  gap: 10px;
+  display: flex;
+}
+
+.logo-image {
+  display: flex;
+  width: 100px;
+  height: auto;
+}
+
 .logo h1 {
   font-weight: 600;
   color: #333;
   margin: 0;
   font-family: 'Poppins', sans-serif;
-  padding-left: 40px;
 }
 
 .user-info {
@@ -99,7 +110,7 @@ body {
 }
 
 .search-bar button:hover {
-  background-color: #0056b3;
+  background-color: #D39F3C;
 }
 
 .logout-button {
@@ -114,12 +125,13 @@ body {
 }
 
 .logout-button:hover {
-  background-color: #c82333 !important;
+  background-color: #5A6268 !important;
 }
 
 .main-content {
   display: flex;
   gap: 20px;
+  padding-top: 0px;
 }
 
 .dashboard {
@@ -128,15 +140,15 @@ body {
   flex-shrink: 0;
   position: relative;
   overflow-y: hidden;
-  padding-bottom: 80px;
   padding: 30px;
-  padding-bottom: 0;
+  padding-top: 0px;
   align-items: flex-start;
 }
 
 .dashboard-content {
   overflow-y: hidden;
   max-height: 100%;
+  padding-top: 0px;
   padding-right: 10px;
   padding-bottom: 8px;
   box-sizing: border-box;
@@ -146,6 +158,7 @@ body {
 
 .dashboard-header {
   padding-left: 20px;
+  padding-top: 0px;
 }
 
 .dashboard::after {
@@ -325,11 +338,11 @@ body {
 }
 
 .add-button:hover {
-  background-color: #0056b3;
+  background-color: #D39F3C;
 }
 
 .remove-button {
-  background-color: #dc3545;
+  background-color: #5A6268;
   color: white;
 }
 
@@ -341,7 +354,6 @@ body {
   padding-top: 40px;
   width: 40%;
   height: 850px;
-  align-items: fl;
 }
 
 .notifications-container,
@@ -455,19 +467,26 @@ body {
   height: 600px;
   border-radius: 20px;
   background-color: white;
+  margin-top: 30px;
+}
+
+.stock-card h2 {
+  align-items: center;
 }
 
 .stock-card-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 0;
+  padding: 10px 10px;
   border-radius: 10px;
+  padding-top: 0px;
 }
 
 .stock-card-buttons {
   display: flex;
   gap: 10px;
+  padding-right: 10px;
 }
 
 .stock-stats {
@@ -479,6 +498,7 @@ body {
   border-radius: 20px;
   font-family: 'Poppins', sans-serif;
   padding-right: 10px;
+  padding-top: 0px;
 }
 
 .current, .change, .predicted, .confidence {
@@ -523,7 +543,7 @@ body {
 }
 
 .notify-button:hover {
-  background-color: #218838;
+  background-color: #D39F3C;
 }
 
 .mini-chart {
@@ -545,7 +565,7 @@ body {
 }
 
 .close-button:hover {
-  background-color: #c82333;
+  background-color: #5a6268;
 }
 
 .notification-modal {
@@ -593,15 +613,16 @@ body {
   cursor: pointer;
   margin: 5px;
   font-family: 'Poppins', sans-serif;
+  color: #D39F3C;
 }
 
 .notification-modal button:first-of-type {
-  background-color: #007bff;
+  background-color: #D39F3C;
   color: white;
 }
 
 .notification-modal button:first-of-type:hover {
-  background-color: #0056b3;
+  background-color: #F9BF58;
 }
 
 .notification-modal button:last-of-type {
@@ -722,7 +743,7 @@ body {
 }
 
 .google-login:hover {
-  background-color: #357ae8;
+  background-color: #D39F3C;
 }
 
 .guest-login {
@@ -741,5 +762,5 @@ body {
 }
 
 .guest-login:hover {
-  background-color: #555;
+  background-color: #F9BF58;
 }

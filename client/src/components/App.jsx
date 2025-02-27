@@ -265,6 +265,10 @@ const App = () => {
         <div>
           <div className="header">
             <div className="logo">
+              <img
+                src="https://i.imgur.com/S0MSg8P.png"
+                alt="Toro Logo"
+                className="logo-image" />
               <h1>TORO MVP</h1>
             </div>
             <div className="user-info">
