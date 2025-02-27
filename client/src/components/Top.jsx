@@ -6,19 +6,20 @@ const Top = ({ top, watchlist, setWatchlist, onStockSelect, watch, priceData }) 
 
 
   return (
-    <div className="top">
-      <h2>Top 10 Trending Stocks</h2>
-      <ul className="top-list">
-        {top.map((stock, index) => (
-          <ListCard
-            key={stock.symbol}
-            stock={stock}
-            priceData={priceData[stock.symbol] || []}
-            onAction={watch}
-            actionLabel="Add to Watchlist"
-            onClick={onStockSelect} />
-        ))}
-      </ul>
+    <div>
+      <div className="top-container">
+        <ul className="top-list">
+          {top.map((stock, index) => (
+            <ListCard
+              key={stock.symbol}
+              stock={stock}
+              priceData={priceData[stock.symbol] || []}
+              onAction={watch}
+              actionLabel="Add to Watchlist"
+              onClick={onStockSelect} />
+          ))}
+        </ul>
+      </div>
     </div>
   );
 };

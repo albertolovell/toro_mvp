@@ -267,15 +267,17 @@ const App = () => {
             <div className="logo">
               <h1>TORO MVP</h1>
             </div>
-            <div className="search-bar">
-              <input
-                type="text"
-                placeholder="Search for a ticker, ex: AAPL"
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                onKeyPress={(e) => e.key === 'Enter' && handleSearch()} />
-                <button onClick={handleSearch}>Search</button>
-                <button
+            <div className="user-info">
+              <div className="search-bar">
+                <input
+                  type="text"
+                  placeholder="Search for a ticker, ex: AAPL"
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                  onKeyPress={(e) => e.key === 'Enter' && handleSearch()} />
+                  <button onClick={handleSearch}>Search</button>
+              </div>
+              <button
                 className="logout-button"
                 onClick={logOut}>Logout</button>
             </div>
@@ -291,26 +293,35 @@ const App = () => {
                 confidenceScore={confidenceScore}
                 onSetNotification={handleNotify} />
             ) : (
-              <Top
-                top={top}
-                onStockSelect={setSelectedStock}
-                watch={handleAddToWatchlist}
-                priceData={priceData} />
+              <div className="dashboard-content">
+                <div className="dashboard-header">
+                  <h2>Top 10 Trending Stocks</h2>
+                </div>
+                <Top
+                  top={top}
+                  onStockSelect={setSelectedStock}
+                  watch={handleAddToWatchlist}
+                  priceData={priceData} />
+              </div>
             )}
           </div>
         <div className="right-panel">
-          <Notifications
-            notifications={notifications}
-            onStockSelect={handleStockSelect}
-            setNotifications={setNotifications}
-            onRemove={handleRemove}
-            priceData={priceData} />
-          <Watchlist
-            watchlist={watchlist}
-            setWatchlist={setWatchlist}
-            onStockSelect={handleStockSelect}
-            onRemove={handleRemove}
-            priceData={priceData} />
+          <div className="nofications-container">
+            <Notifications
+              notifications={notifications}
+              onStockSelect={handleStockSelect}
+              setNotifications={setNotifications}
+              onRemove={handleRemove}
+              priceData={priceData} />
+          </div>
+          <div className="watchlist-container">
+            <Watchlist
+              watchlist={watchlist}
+              setWatchlist={setWatchlist}
+              onStockSelect={handleStockSelect}
+              onRemove={handleRemove}
+              priceData={priceData} />
+          </div>
         </div>
         </div>
       </div>
