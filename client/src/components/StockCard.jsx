@@ -27,11 +27,11 @@ const StockCard = ({ stock, onClose, priceData, predictedPrice, confidenceScore,
             <span
               className="current"
               title="The current market price of the stock, delayed by 30minutes"
-              >Current Price: ${stock?.data?.regularMarketPrice?.toFixed(2)}</span>
+              >Current Price: <br/>${stock?.data?.regularMarketPrice?.toFixed(2)}</span>
             <span
               className="change"
               title="Percentage change from the market open price to the current price"
-              >% Change:
+              >%Change:<br/>
                 <span
                   className={`change-value ${getPercentageChange(stock?.data?.regularMarketOpen, stock?.data?.regularMarketPrice) >= 0 ? 'positive' : 'negative'}`}>
                 {getPercentageChange(stock?.data?.regularMarketOpen, stock?.data?.regularMarketPrice)}
@@ -40,7 +40,7 @@ const StockCard = ({ stock, onClose, priceData, predictedPrice, confidenceScore,
             <span
               className="predicted"
               title="Predicted price for tomorrow using TensorFlow.js, trained on the past month of historical data"
-              >"Forecasted Price":
+              >"Forecasted Price":<br/>
                 <span className="predicted-value">
                   ${parseFloat(predictedPrice).toFixed(2)}
                 </span>
@@ -48,7 +48,7 @@ const StockCard = ({ stock, onClose, priceData, predictedPrice, confidenceScore,
             <span
               className="confidence"
               title="Confidence level based on Root Mean Square Error (RMSE), representing the average deviation between predicted and actual prices in this model"
-              >(RMSE): +/- ${confidenceScore}</span>
+              >(RMSE): <br/>+/- ${confidenceScore}</span>
 
             {stock.targetPrice && (
               <span className="target">Target Price: {stock.condition} ${stock.targetPrice}</span>
@@ -81,7 +81,7 @@ const StockCard = ({ stock, onClose, priceData, predictedPrice, confidenceScore,
               <Tooltip
                 contentStyle={{ backgroundColor: '#333', color: '#fff', borderRadius: '10px' }}
                 itemStyle={{ color: '#82ca9d' }}
-                labelStyle={{ color: '#8884d8' }}
+                labelStyle={{ color: '#D39F3C' }}
                 formatter={(value) => [`$${value.toFixed(2)}`, 'Price']}/>
               <CartesianGrid strokeDasharray="3 3" />
                 <defs>
@@ -93,7 +93,7 @@ const StockCard = ({ stock, onClose, priceData, predictedPrice, confidenceScore,
               <Line
                 type="monotone"
                 dataKey="price"
-                stroke="#8884d8"
+                stroke="#D39F3C"
                 strokeWidth={2}
                 dot={false} />
             </LineChart>

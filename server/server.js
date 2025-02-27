@@ -27,7 +27,7 @@ app.get('/api/search', async (req, res) => {
   try {
     const result = await yahooFinance.quote(query);
 
-    if (!result || !result.symbol) {
+    if (!result || !result.symbol || result.regularMarketPrice === undefined) {
       return res.status(404).send('No stock found');
     }
 

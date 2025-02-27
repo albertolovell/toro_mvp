@@ -161,6 +161,7 @@ const App = () => {
         alert('No results found');
       }
     } catch (err) {
+      alert('Invalid stock symbol');
       console.error('search failed', err);
     }
   };

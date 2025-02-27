@@ -31,7 +31,7 @@ const ListCard = ({ stock, priceData, onAction, actionLabel, onClick, compact })
               <Line
                 type="monotone"
                 dataKey="price"
-                stroke="#8884d8"
+                stroke="#D39F3C"
                 strokeWidth={2}
                 dot={false} />
             </LineChart>
