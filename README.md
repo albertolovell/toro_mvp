@@ -1,9 +1,9 @@
-<u>Oveview:</u>
+<ins>Overview:</ins>
 
 Toro MVP is a lightweight market tracker designed to track trending stocks, build a personalized watchlist, and receive alerts when prices hit target levels
 
 
-<u>Features:</u>
+<ins>Features:</ins>
   - Browse top 10 trending tickers from the Yahoo Finance API
   - Search and add companies to a custom watchlist
   - Set price alerts for notification of target conditions
@@ -12,12 +12,12 @@ Toro MVP is a lightweight market tracker designed to track trending stocks, buil
   - Sign in securely with Google authentication via Firebase
 
 
-<u>Navigation Demo:</u>
+<ins>Navigation Demo:</ins>
 
 ![Toro MVP Navigation](./assets/toro_nav.gif)
 
 
-<u>Tech Stack:</u>
+<ins>Tech Stack:</ins>
 
 Frontend:
   React.js, Axios, Recharts, TensorFlow.js
@@ -26,7 +26,7 @@ Backend:
   Node.js, Express, MongoDB/mongoose, Yahoo Finance API/yahoo-finance2, Firebase, AWS EC2
 
 
-<u>Installation & Setup:</u>
+<ins>Installation & Setup:</ins>
   - Clone the repo
   - npm install
   - Replace variables in example.env and rename to .env
