@@ -1,4 +1,4 @@
-<ins>Overview:</ins>
+# Personalized Stock Tracker
 
 Toro MVP is a lightweight market tracker designed to track trending stocks, build a personalized watchlist, and receive alerts when prices hit target levels
 
